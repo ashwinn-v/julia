@@ -1703,11 +1703,11 @@ function detect_ambiguities(mods::Module...;
     end
     function examine(mt::Core.MethodTable)
         for m in Base.MethodList(mt)
+            m.sig == Tuple && continue # ignore Builtins
             is_in_mods(m.module, recursive, mods) || continue
             ambig = Int32[0]
-            ms = Base._methods_by_ftype(m.sig, nothing, -1, typemax(UInt), true, UInt[typemin(UInt)], UInt[typemax(UInt)], ambig)
+            ms = Base._methods_by_ftype(m.sig, nothing, -1, typemax(UInt), true, UInt[typemin(UInt)], UInt[typemax(UInt)], ambig)::Vector
             ambig[1] == 0 && continue
-            isa(ms, Bool) && continue
             for match2 in ms
                 match2 = match2::Core.MethodMatch
                 m2 = match2.method
@@ -1754,8 +1754,9 @@ function detect_unbound_args(mods...;
     mods = collect(mods)::Vector{Module}
     function examine(mt::Core.MethodTable)
         for m in Base.MethodList(mt)
-            has_unbound_vars(m.sig) || continue
+            m.sig == Tuple && continue # ignore Builtins
             is_in_mods(m.module, recursive, mods) || continue
+            has_unbound_vars(m.sig) || continue
             tuple_sig = Base.unwrap_unionall(m.sig)::DataType
             if Base.isvatuple(tuple_sig)
                 params = tuple_sig.parameters[1:(end - 1)]
