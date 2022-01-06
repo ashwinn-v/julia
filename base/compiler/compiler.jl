@@ -17,6 +17,8 @@ const replaceproperty! = Core.replacefield!
 
 ccall(:jl_set_istopmod, Cvoid, (Any, Bool), Compiler, false)
 
+convert(::Type{Any}, Core.@nospecialize x) = x
+
 eval(x) = Core.eval(Compiler, x)
 eval(m, x) = Core.eval(m, x)
 

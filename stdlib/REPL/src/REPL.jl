@@ -35,6 +35,7 @@ _displaysize(io::IO) = displaysize(io)::Tuple{Int,Int}
 
 include("Terminals.jl")
 using .Terminals
+import .Terminals: hascolor
 
 abstract type AbstractREPL end
 

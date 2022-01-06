@@ -201,6 +201,12 @@ export
     # constants
     nothing, Main
 
+function convert end
+ccall(:jl_toplevel_eval_in, Any, (Any, Any),
+      Core, quote
+          (::typeof(convert))(::Type{Any}, $(_expr(:meta, :nospecialize, :x))) = x
+      end)
+
 const getproperty = getfield
 const setproperty! = setfield!
 
@@ -437,7 +443,6 @@ end
 # simple convert for use by constructors of types in Core
 # note that there is no actual conversion defined here,
 # so the methods and ccall's in Core aren't permitted to use convert
-convert(::Type{Any}, @nospecialize(x)) = x
 convert(::Type{T}, x::T) where {T} = x
 cconvert(::Type{T}, x) where {T} = convert(T, x)
 unsafe_convert(::Type{T}, x::T) where {T} = x
