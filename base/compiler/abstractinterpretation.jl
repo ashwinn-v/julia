@@ -1696,7 +1696,7 @@ function abstract_eval_statement(interp::AbstractInterpreter, @nospecialize(e), 
                 end
                 if !anyrefine
                     anyrefine = has_nontrivial_const_info(at) || # constant information
-                                at ⋤ ft                          # just a type-level information, but more precise than the declared type
+                                at ⋤ₜ ft                         # just a type-level information, but more precise than the declared type
                 end
                 ats[i-1] = at
             end

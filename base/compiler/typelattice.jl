@@ -473,20 +473,20 @@ The non-strict partial order over the type inference lattice.
 end
 
 """
-    a ⊏ b -> Bool
+    a::LatticeElement ⊏ b::LatticeElement -> Bool
 
 The strict partial order over the type inference lattice.
 This is defined as the irreflexive kernel of `⊑`.
 """
-@nospecialize(a) ⊏ @nospecialize(b) = a ⊑ b && !⊑(b, a)
+a::LatticeElement ⊏ b::LatticeElement = a ⊑ b && !⊑(b, a)
 
 """
-    a ⋤ b -> Bool
+    a::LatticeElement ⋤ b::LatticeElement -> Bool
 
 This order could be used as a slightly more efficient version of the strict order `⊏`,
 where we can safely assume `a ⊑ b` holds.
 """
-@nospecialize(a) ⋤ @nospecialize(b) = !⊑(b, a)
+a::LatticeElement ⋤ b::LatticeElement = !⊑(b, a)
 
 a::LatticeElement ⊑ₜ @nospecialize(b#=::Type=#) = widenconst(a) <: b
 a::LatticeElement ⊏ₜ @nospecialize(b#=::Type=#) = widenconst(a) <: b && !(b <: widenconst(a))
