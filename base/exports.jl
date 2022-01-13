@@ -772,6 +772,7 @@ export
 # help and reflection
     code_typed,
     code_lowered,
+    code_escapes,
     fullname,
     functionloc,
     isconst,

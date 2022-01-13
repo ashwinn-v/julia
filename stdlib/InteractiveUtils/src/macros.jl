@@ -208,7 +208,7 @@ macro which(ex0::Symbol)
     return :(which($__module__, $ex0))
 end
 
-for fname in [:code_warntype, :code_llvm, :code_native]
+for fname in [:code_warntype, :code_llvm, :code_native, :code_escapes]
     @eval begin
         macro ($fname)(ex0...)
             gen_call_with_extracted_types_and_kwargs(__module__, $(Expr(:quote, fname)), ex0)
@@ -343,6 +343,16 @@ Set the optional keyword argument `debuginfo` by putting it before the function 
 `debuginfo` may be one of `:source` (default) or `:none`, to specify the verbosity of code comments.
 """
 :@code_native
+
+"""
+    @code_escapes [options...] f(args...)
+
+Evaluates the arguments to the function call, determines its types, and then calls
+[`code_escapes`](@ref) on the resulting expression.
+As with `@code_typed` and its family, any of `code_escapes` keyword arguments can be given
+as the optional arguments like `@code_escpase interp=myinterp myfunc(myargs...)`.
+"""
+:@code_escapes
 
 """
     @time_imports
